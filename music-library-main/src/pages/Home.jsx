@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { Navigate } from 'react-router-dom'
+import Loader from '../components/common/Loader';
 
 const MusicLibrary = React.lazy(() => import('music_library/MusicLibrary'));
 
@@ -11,7 +12,7 @@ function Home() {
     return <Navigate to={"/auth"} replace />
   }
   return (
-    <Suspense fallback={<div className="text-center text-gray-600">Loading Music Library...</div>}>
+    <Suspense fallback={<div className="min-h-[94vh] border flex items-center justify-center"><Loader/></div>}>
       <MusicLibrary currentUser={currentUser} />
     </Suspense>
   );

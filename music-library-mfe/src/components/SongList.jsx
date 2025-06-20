@@ -17,7 +17,7 @@ const SongList = ({ currentUser }) => {
     const savedSongs = localStorage.getItem('adminAddedSongs');
     return savedSongs ? JSON.parse(savedSongs) : [];
   });
-  
+
   const [filter, setFilter] = useState('');
   const [sortBy, setSortBy] = useState('title');
   const [groupBy, setGroupBy] = useState('');
@@ -38,13 +38,19 @@ const SongList = ({ currentUser }) => {
   }, [role, addedSongs]);
 
   const filteredSongs = useMemo(() => {
-    return displaySongs
+    const uniqueSongs = Array.from(new Set(displaySongs.map(song => song.id)))
+      .map(id => displaySongs.find(song => song.id === id));
+    return uniqueSongs
       .filter((song) =>
         song.title.toLowerCase().includes(filter.toLowerCase()) ||
         (song.artist && song.artist.toLowerCase().includes(filter.toLowerCase())) ||
         (song.album && song.album.toLowerCase().includes(filter.toLowerCase()))
       )
-      .sort((a, b) => (a[sortBy] || '').localeCompare(b[sortBy] || ''));
+      .sort((a, b) => {
+        const valA = (a[sortBy] || 'zzz').toLowerCase(); 
+        const valB = (b[sortBy] || 'zzz').toLowerCase();
+        return valA.localeCompare(valB);
+      });
   }, [displaySongs, filter, sortBy]);
 
   const groupedSongs = useMemo(() => {
@@ -86,13 +92,13 @@ const SongList = ({ currentUser }) => {
   ];
 
   const groupOptions = [
-    { value: '', label: 'No Grouping' },
+    { value: '', label: 'None' },
     { value: 'genre', label: 'By Genre' },
     { value: 'artist', label: 'By Artist' }
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-[#f8f8f8] px-6 py-4">
       <Header
         filteredSongsLength={filteredSongs.length}
         filter={filter}
@@ -112,8 +118,8 @@ const SongList = ({ currentUser }) => {
         setShowAddModal={setShowAddModal}
       />
       {(showSortDropdown || showGroupDropdown) && (
-        <div 
-          className="fixed inset-0 z-5" 
+        <div
+          className="fixed inset-0 z-5"
           onClick={() => {
             setShowSortDropdown(false);
             setShowGroupDropdown(false);

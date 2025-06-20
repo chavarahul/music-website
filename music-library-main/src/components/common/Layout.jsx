@@ -25,10 +25,10 @@ function Layout({ children }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-[#f8f8f8]">
       <aside
         className={clsx(
-          'bg-white border-r border-gray-300 flex flex-col justify-between transition-transform duration-300 z-50 w-64',
+          ' border-r border-gray-300 flex flex-col justify-between transition-transform duration-300 z-50 w-64',
           sidebarOpen
             ? 'translate-x-0 fixed inset-y-0 left-0'
             : 'hidden md:flex md:translate-x-0 md:static'
@@ -36,7 +36,7 @@ function Layout({ children }) {
       >
         <div>
           <div className="p-4 border-b border-gray-200 flex items-center gap-2">
-            <Music className="w-6 h-6 text-green-700" />
+            <Music className="w-6 h-6 text-green-600" />
             <span className="text-xl font-semibold text-gray-900">Melofy</span>
           </div>
           <nav className="mt-6 flex flex-col space-y-1 px-4">
@@ -47,8 +47,8 @@ function Layout({ children }) {
                 className={clsx(
                   'flex items-center gap-3 p-2 rounded-md text-sm transition-colors',
                   location.pathname === path
-                    ? 'bg-green-100 text-green-700 font-semibold'
-                    : 'text-gray-700 hover:bg-green-50 hover:text-green-700'
+                    ? 'bg-green-100 text-green-600 font-semibold'
+                    : 'text-gray-600 hover:bg-green-50 hover:text-green-600'
                 )}
               >
                 <Icon className="w-5 h-5" />
@@ -69,17 +69,17 @@ function Layout({ children }) {
       </aside>
 
       <div className="flex-1 flex flex-col">
-        <header className="flex items-center justify-between px-4 py-[0.73rem] bg-white border-b border-gray-300 shadow-sm">
+        <header className="flex items-center justify-between px-4 py-[0.71rem]  border-b border-gray-300">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen((prev) => !prev)}
               className="block md:hidden p-2 rounded-md hover:bg-gray-200 transition-colors res"
             >
-              <Menu className="w-5 h-5 text-gray-700" />
+              <Menu className="w-5 h-5 text-gray-600" />
             </button>
             <h1 className="text-lg font-medium text-gray-800">Dashboard</h1>
           </div>
-          <div className="bg-green-700 text-white py-2 px-3.5  border rounded-full text-sm font-semibold">
+          <div className="bg-green-600 text-white py-2 px-3.5  border rounded-full text-sm font-semibold">
             {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
           </div>
         </header>
