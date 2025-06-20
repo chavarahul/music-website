@@ -155,17 +155,14 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-gray-50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden border border-gray-200">
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white">
+        <div className=" px-6 py-4 ">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <div className="bg-white/20 rounded-full p-2">
-                <Music className="w-6 h-6" />
-              </div>
-              <h2 className="text-2xl font-bold">Add New Song</h2>
+              <h2 className="text-2xl font-semibold">Add New Song</h2>
             </div>
             <button 
               onClick={handleClose}
-              className="text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-all duration-200"
+              className="text-black/80  rounded-full p-2 transition-all duration-200"
             >
               <X className="w-6 h-6" />
             </button>
@@ -317,7 +314,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-100 px-6 py-4 border-t border-gray-200">
+        <div className=" px-6 py-4">
           <div className="flex justify-end gap-3">
             <button
               type="button"
