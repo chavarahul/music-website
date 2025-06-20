@@ -12,7 +12,7 @@ function Home() {
     return <Navigate to={"/auth"} replace />
   }
   return (
-    <Suspense fallback={<div className="min-h-[94vh] border flex items-center justify-center"><Loader/></div>}>
+    <Suspense fallback={<div className="min-h-[94vh] flex items-center justify-center"><Loader/></div>}>
       <MusicLibrary currentUser={currentUser} />
     </Suspense>
   );
