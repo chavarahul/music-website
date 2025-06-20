@@ -7,4 +7,14 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./src/components/ui/**/*.{js,ts,jsx,tsx}", 
   ],
+    plugins: [require("tailwindcss-animate")],
+    theme: {
+    extend: {
+      colors: {
+        'melofy-green-dark': '#059669',
+        'melofy-green-light': '#10b981',
+        'melofy-green-bg': '#dcfce7',
+      },
+    },
+}
 };
