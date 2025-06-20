@@ -18,6 +18,9 @@ export default defineConfig({
     cors: true,
   },
   build: {
+        modulePreload: false,
     target: "esnext",
+    minify: false,
+    cssCodeSplit: false,
   },
 })

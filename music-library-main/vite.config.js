@@ -24,6 +24,9 @@ export default defineConfig({
     cors: true,
   },
   build: {
-    target: 'esnext',
+        modulePreload: false,
+    target: "esnext",
+    minify: false,
+    cssCodeSplit: false,
   },
 });
