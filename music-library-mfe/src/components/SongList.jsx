@@ -1,15 +1,22 @@
-import React, { useMemo, useState } from 'react';
-import { Search, ChevronDown, Grid, Plus, X, Trash2, SortAsc, Music } from 'lucide-react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { Search, ChevronDown, Grid, Plus, X, Trash2, SortAsc } from 'lucide-react';
 
 const SongList = ({ currentUser }) => {
-  const [songs, setSongs] = useState([
+  // Static songs (only for users)
+  const staticSongs = [
     { id: 1, title: 'Anusha', artist: '', album: '', duration: '', genre: 'Pop' },
     { id: 2, title: 'Singout', artist: '', album: '', duration: '', genre: 'Indie Pop' },
     { id: 3, title: 'Watermelon Sugar', artist: 'Harry Styles', album: 'Fine Line', duration: '2:54', genre: 'Pop' },
     { id: 4, title: 'Peaches', artist: 'Justin Bieber ft. Daniel Caesar', album: 'Justice', duration: '3:18', genre: 'R&B' },
     { id: 5, title: 'Good 4 U', artist: 'Olivia Rodrigo', album: 'Sour', duration: '', genre: 'Rock' },
-  ]);
+  ];
 
+  // Load admin-added songs from localStorage or initialize empty
+  const [addedSongs, setAddedSongs] = useState(() => {
+    const savedSongs = localStorage.getItem('adminAddedSongs');
+    return savedSongs ? JSON.parse(savedSongs) : [];
+  });
+  
   const [filter, setFilter] = useState('');
   const [sortBy, setSortBy] = useState('title');
   const [groupBy, setGroupBy] = useState('');
@@ -21,15 +28,23 @@ const SongList = ({ currentUser }) => {
 
   const role = currentUser?.role;
 
+  // Determine songs to display based on role
+  const displaySongs = useMemo(() => {
+    if (role === 'admin') {
+      return addedSongs;
+    }
+    return [...staticSongs, ...addedSongs];
+  }, [role, addedSongs]);
+
   const filteredSongs = useMemo(() => {
-    return songs
+    return displaySongs
       .filter((song) =>
         song.title.toLowerCase().includes(filter.toLowerCase()) ||
         (song.artist && song.artist.toLowerCase().includes(filter.toLowerCase())) ||
         (song.album && song.album.toLowerCase().includes(filter.toLowerCase()))
       )
       .sort((a, b) => (a[sortBy] || '').localeCompare(b[sortBy] || ''));
-  }, [songs, filter, sortBy]);
+  }, [displaySongs, filter, sortBy]);
 
   const groupedSongs = useMemo(() => {
     if (!groupBy) return null;
@@ -41,16 +56,21 @@ const SongList = ({ currentUser }) => {
     }, {});
   }, [filteredSongs, groupBy]);
 
+  // Persist added songs to localStorage
+  useEffect(() => {
+    localStorage.setItem('adminAddedSongs', JSON.stringify(addedSongs));
+  }, [addedSongs]);
+
   const handleAddSong = () => {
     if (!newSong.title.trim()) return;
-    const id = songs.length ? Math.max(...songs.map((s) => s.id)) + 1 : 1;
-    setSongs([...songs, { id, ...newSong }]);
+    const id = addedSongs.length ? Math.max(...addedSongs.map((s) => s.id)) + 1 : 1;
+    setAddedSongs([...addedSongs, { id, ...newSong }]);
     setNewSong({ title: '', artist: '', album: '', duration: '', genre: '' });
     setShowAddModal(false);
   };
 
   const handleDeleteSong = (id) => {
-    setSongs(songs.filter((song) => song.id !== id));
+    setAddedSongs(addedSongs.filter((song) => song.id !== id));
     setDeleteConfirm(null);
   };
 
@@ -68,7 +88,7 @@ const SongList = ({ currentUser }) => {
   ];
 
   const SongCard = ({ song }) => (
-    <div className="bg-gray-50 p-4 mt-6 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 border border-gray-200">
+    <div className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 border border-gray-200">
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-semibold text-gray-900 truncate flex-1 mr-2">{song.title}</h3>
         {role === 'admin' && (
@@ -92,7 +112,7 @@ const SongList = ({ currentUser }) => {
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-gray-500">Duration: {song.duration || '-'}</span>
-          <span className="bg-green-100 text-green-700 p-2 rounded-full font-medium">
+          <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
             {song.genre || 'Unknown'}
           </span>
         </div>
@@ -102,6 +122,7 @@ const SongList = ({ currentUser }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-gray-900">Music Library</h1>
@@ -109,9 +130,12 @@ const SongList = ({ currentUser }) => {
             {filteredSongs.length} songs
           </div>
         </div>
-
+        
+        {/* Controls */}
         <div className="flex flex-wrap gap-2">
+          {/* Search */}
           <div className="relative flex-1 min-w-64">
+            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search songs, artists, albums..."
@@ -120,7 +144,8 @@ const SongList = ({ currentUser }) => {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
           </div>
-
+          
+          {/* Sort Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -142,8 +167,9 @@ const SongList = ({ currentUser }) => {
                       setSortBy(option.value);
                       setShowSortDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${sortBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
-                      }`}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${
+                      sortBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
+                    }`}
                   >
                     {option.label}
                   </button>
@@ -151,7 +177,8 @@ const SongList = ({ currentUser }) => {
               </div>
             )}
           </div>
-
+          
+          {/* Group Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -173,8 +200,9 @@ const SongList = ({ currentUser }) => {
                       setGroupBy(option.value);
                       setShowGroupDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${groupBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
-                      }`}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${
+                      groupBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
+                    }`}
                   >
                     {option.label}
                   </button>
@@ -182,7 +210,7 @@ const SongList = ({ currentUser }) => {
               </div>
             )}
           </div>
-
+          
           {/* Add Song Button */}
           {role === 'admin' && (
             <button
@@ -196,9 +224,10 @@ const SongList = ({ currentUser }) => {
         </div>
       </div>
 
+      {/* Click outside to close dropdowns */}
       {(showSortDropdown || showGroupDropdown) && (
-        <div
-          className="fixed inset-0 z-5"
+        <div 
+          className="fixed inset-0 z-5" 
           onClick={() => {
             setShowSortDropdown(false);
             setShowGroupDropdown(false);
@@ -206,16 +235,15 @@ const SongList = ({ currentUser }) => {
         />
       )}
 
+      {/* Songs Display */}
       {filteredSongs.length === 0 ? (
         <div className="text-center py-12">
-          <div className="text-gray-400 mx-auto text-center text-6xl mb-4 pt-10">
-            <Music className="w-6 h-6 text-green-700" />
-          </div>
+          <div className="text-gray-400 text-6xl mb-4">🎵</div>
           <p className="text-gray-600 text-lg">No songs found matching your search.</p>
           <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or filters.</p>
         </div>
       ) : groupBy && groupedSongs ? (
-        <div className="space-y-8 mt-6">
+        <div className="space-y-8">
           {Object.keys(groupedSongs).sort().map((groupKey) => (
             <div key={groupKey}>
               <div className="flex items-center gap-3 mb-4">
@@ -224,7 +252,7 @@ const SongList = ({ currentUser }) => {
                   {groupedSongs[groupKey].length} songs
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {groupedSongs[groupKey].map((song) => (
                   <SongCard key={song.id} song={song} />
                 ))}
@@ -240,21 +268,22 @@ const SongList = ({ currentUser }) => {
         </div>
       )}
 
+      {/* Add Song Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-gray-800">Add New Song</h2>
-              <button
+              <button 
                 onClick={() => setShowAddModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="space-y-7 mt-5">
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibol text-black/90 mb-1">Title *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                 <input
                   type="text"
                   value={newSong.title}
@@ -264,7 +293,7 @@ const SongList = ({ currentUser }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibol text-black/90 mb-1">Artist</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Artist</label>
                 <input
                   type="text"
                   value={newSong.artist}
@@ -273,7 +302,7 @@ const SongList = ({ currentUser }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibol text-black/90 mb-1">Album</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Album</label>
                 <input
                   type="text"
                   value={newSong.album}
@@ -282,7 +311,7 @@ const SongList = ({ currentUser }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibol text-black/90 mb-1">Duration</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
                 <input
                   type="text"
                   value={newSong.duration}
@@ -292,7 +321,7 @@ const SongList = ({ currentUser }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibol text-black/90 mb-1">Genre</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Genre</label>
                 <input
                   type="text"
                   value={newSong.genre}
@@ -321,12 +350,13 @@ const SongList = ({ currentUser }) => {
         </div>
       )}
 
+      {/* Delete Confirmation Modal */}
       {deleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-1/2 max-w-sm">
-            <h2 className="text-lg font-bold text-gray-800 mb-4">Confirm Delete</h2>
+          <div className="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h2>
             <p className="text-gray-600 mb-6">Are you sure you want to permanently delete this song? This action cannot be undone.</p>
-            <div className="flex justify-end gap-3 mt-3">
+            <div className="flex justify-end gap-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
                 className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
@@ -335,7 +365,7 @@ const SongList = ({ currentUser }) => {
               </button>
               <button
                 onClick={() => handleDeleteSong(deleteConfirm)}
-                className="btn-red"
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Delete
               </button>
