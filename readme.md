@@ -1,6 +1,6 @@
 Music Streaming Web App
 
-A music streaming web app built with React, using a micro frontend setup with Webpack Module Federation, role-based authentication (Admin/User), and deployed on Vercel.
+A music streaming web app built with React, using a micro frontend setup with Webpack Module Federation, role-based authentication (Admin/User), and deployed on Vercel. It uses localStorage for auth and admin-added songs, with a responsive UI styled with Tailwind CSS.
 
 Live Applications
 - Main Shell App: https://music-website-main.vercel.app
@@ -27,6 +27,12 @@ Login Credentials (Demo)
 | User  | Test     | Test@123    |
 
 You can sign up as a User with your own credentials. Admin login uses the above credentials.
+
+Deployment
+- Push the main app (music-library-main) and micro frontend (music-library-mfe) to separate GitHub repositories.
+- Connect each repository to Vercel via the Vercel dashboard or CLI (vercel --prod).
+- Ensure the micro frontend's remoteEntry.js is accessible at https://music-library-mfe.vercel.app/assets/remoteEntry.js.
+- Both apps are deployed separately to Vercel, with the main app fetching the micro frontend dynamically.
 
 Micro Frontend Architecture
 
@@ -73,18 +79,19 @@ How It Works:
 - Code: AuthContext.js manages login, signup, logout, and stores tokens in localStorage.
 
 Access Rules
-- Admin: Can add/delete songs, sees only admin-added songs.
-- User: Can view all songs (default + admin-added), cannot add/delete.
+- Admin: Can add/delete songs.
+- User: Can view admin-added songs, cannot add/delete.
 
 Features in Music Library (Micro App)
-- View songs with search, sort, and group options.
+- View admin-added songs with search, sort, and group options.
 - Search by title, artist, or album.
 - Sort by title, artist, album, or genre.
 - Group by genre or artist.
 - Add songs (Admin only) via a modal.
 - Delete songs (Admin only) with confirmation.
+- Shows "No songs available. Admins can add new songs using the 'Add Song' button." in SongGrid if no songs exist.
 - Responsive UI with Tailwind CSS.
-- Code: SongList.jsx manages song data, filters, and admin actions, storing admin-added songs in localStorage.
+- Code: SongList.jsx manages admin-added songs (stored in localStorage), filters, and admin actions.
 
 Tech Stack
 | Feature                | Stack/Library                     |
