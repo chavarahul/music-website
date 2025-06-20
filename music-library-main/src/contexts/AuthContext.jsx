@@ -8,6 +8,15 @@ export const AuthProvider = ({ children }) => {
 
   const ADMIN_USERNAME = 'Admin';
   const ADMIN_PASSWORD = 'Admin@123';
+  const DEFAULT_USER = { username: 'Test', password: 'Test@123' };
+
+  useEffect(() => {
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+    if (!users[DEFAULT_USER.username]) {
+      users[DEFAULT_USER.username] = { password: DEFAULT_USER.password };
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {

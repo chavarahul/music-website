@@ -28,9 +28,9 @@ function Layout({ children }) {
     <div className="flex h-screen overflow-hidden bg-[#f8f8f8]">
       <aside
         className={clsx(
-          'bg-white border-r border-gray-300 flex flex-col justify-between transition-transform duration-300 z-50 w-64',
+          'border-r border-gray-300 flex flex-col justify-between transition-transform duration-300 z-50 w-64',
           sidebarOpen
-            ? 'translate-x-0 fixed inset-y-0 left-0'
+            ? 'translate-x-0 fixed inset-y-0 left-0 bg-white'
             : 'hidden md:flex md:translate-x-0 md:static'
         )}
       >
