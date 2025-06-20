@@ -5,7 +5,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Validation functions
   const validateTitle = (title) => {
     if (!title || title.trim().length === 0) return 'Title is required';
     if (title.trim().length < 2) return 'Title must be at least 2 characters';
@@ -30,7 +29,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
   const validateDuration = (duration) => {
     if (!duration || duration.trim().length === 0) return 'Duration is required';
     
-    // Support formats: MM:SS, M:SS, H:MM:SS
     const timeRegex = /^(?:(\d{1,2}):)?([0-5]?\d):([0-5]\d)$/;
     const simpleTimeRegex = /^([0-5]?\d):([0-5]\d)$/;
     
@@ -38,7 +36,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
       return 'Duration must be in format MM:SS or H:MM:SS (e.g., 3:45 or 1:23:45)';
     }
     
-    // Additional validation for seconds
     const parts = duration.split(':');
     if (parts.length >= 2) {
       const seconds = parseInt(parts[parts.length - 1]);
@@ -59,10 +56,8 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
     const { name, value } = e.target;
     setNewSong((prev) => ({ ...prev, [name]: value }));
     
-    // Clear global error
     if (error) setError('');
     
-    // Real-time validation
     let fieldError = null;
     switch (name) {
       case 'title':
@@ -89,7 +84,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
   };
 
   const handleFormSubmit = async () => {
-    // Validate all fields
     const errors = {
       title: validateTitle(newSong.title),
       artist: validateArtist(newSong.artist),
@@ -100,7 +94,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
 
     setValidationErrors(errors);
 
-    // Check if there are any errors
     const hasErrors = Object.values(errors).some(error => error !== null);
     
     if (hasErrors) {
@@ -122,12 +115,8 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
     setValidationErrors({});
   };
 
-  // Format duration as user types
   const formatDuration = (value) => {
-    // Remove any non-digit or colon characters
     const cleaned = value.replace(/[^\d:]/g, '');
-    
-    // Handle basic MM:SS format
     if (cleaned.length === 3 && cleaned.indexOf(':') === -1) {
       return cleaned.slice(0, 1) + ':' + cleaned.slice(1);
     }
@@ -154,11 +143,10 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-gray-50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden border border-gray-200">
-        {/* Header */}
-        <div className=" px-6 py-4 ">
+        <div className=" px-6 pt-3 ">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-              <h2 className="text-2xl font-semibold">Add New Song</h2>
+              <h2 className="text-xl font-semibold">Add New Song</h2>
             </div>
             <button 
               onClick={handleClose}
@@ -169,9 +157,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
           </div>
         </div>
 
-        {/* Form Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-          {/* Global Error */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
               <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -180,7 +166,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
           )}
 
           <div className="space-y-5">
-            {/* Title Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <Music className="w-4 h-4 text-green-600" />
@@ -206,7 +191,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
               )}
             </div>
 
-            {/* Artist Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <User className="w-4 h-4 text-green-600" />
@@ -232,7 +216,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
               )}
             </div>
 
-            {/* Album Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <Disc className="w-4 h-4 text-green-600" />
@@ -258,7 +241,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
               )}
             </div>
 
-            {/* Duration Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <Clock className="w-4 h-4 text-green-600" />
@@ -285,7 +267,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
               )}
             </div>
 
-            {/* Genre Field */}
             <div className="space-y-2">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                 <Tag className="w-4 h-4 text-green-600" />
@@ -313,7 +294,6 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
           </div>
         </div>
 
-        {/* Footer */}
         <div className=" px-6 py-4">
           <div className="flex justify-end gap-3">
             <button
