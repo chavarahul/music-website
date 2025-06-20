@@ -79,64 +79,19 @@ function Auth() {
     e.currentTarget.classList.remove('animate-music-pulse-fast');
   };
 
-  const handleQuoteHover = (e) => {
-    e.currentTarget.classList.add('scale-110', 'text-green-700');
-  };
-
-  const handleQuoteLeave = (e) => {
-    e.currentTarget.classList.remove('scale-110', 'text-green-700');
-  };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 via-white to-green-100 relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <svg
-            key={i}
-            className={`w-${4 + Math.floor(Math.random() * 3)} h-${4 + Math.floor(Math.random() * 3)} absolute animate-float transition-transform duration-300`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${i * 0.15}s`,
-              animationDuration: `${3 + Math.random() * 3}s`,
-            }}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9 18V5L21 3V16" stroke="#059669" strokeWidth="2" />
-            <circle cx="6" cy="18" r="3" fill="#10b981" />
-            <circle cx="18" cy="16" r="3" fill="#10b981" />
-          </svg>
-        ))}
-        <div className="absolute top-10 left-10 w-48 h-48 bg-gradient-to-r from-green-400/30 to-green-600/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-64 h-64 bg-gradient-to-r from-green-500/20 to-green-700/20 rounded-full blur-4xl animate-pulse" />
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-gradient-to-r from-green-400/15 to-green-600/15 rounded-full blur-2xl animate-pulse" />
-        <div className="absolute top-2/3 right-1/3 w-40 h-40 bg-gradient-to-r from-gray-300/10 to-green-500/10 rounded-full blur-3xl animate-pulse" />
-        <svg className="absolute bottom-0 w-full h-48 opacity-40" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M0 60C120 40 240 80 360 60C480 40 600 80 720 60C840 40 960 80 1080 60C1200 40 1320 80 1440 60"
-            stroke="#059669"
-            strokeWidth="5"
-            strokeOpacity="0.6"
-          />
-          <path
-            d="M0 70C120 50 240 90 360 70C480 50 600 90 720 70C840 50 960 90 1080 70C1200 50 1320 90 1440 70"
-            stroke="#10b981"
-            strokeWidth="5"
-            strokeOpacity="0.6"
-          />
-        </svg>
-      </div>
-      <div className="w-full lg:w-[35%] flex flex-col items-center lg:justify-between justify-center p-6 sm:p-16 z-10 relative bg-white/95 backdrop-blur-lg shadow-2xl rounded-r-3xl">
+    <div className="min-h-screen flex relative overflow-hidden">
+
+      <div className="w-full lg:w-[35%] flex flex-col items-center lg:justify-between justify-center p-6 sm:p-16 z-10 relative bg-[#f8f8f8] backdrop-blur-lg rounded-r-3xl border-r shadow-lg bg-studio border-default">
         <div className={`max-md:mb-10 p-3 flex justify-center items-center gap-2 w-full ${!isLogin && 'lg:-mt-12 lg:pb-16'}`}>
           <Music className="w-6 h-6 text-green-700" />
           <span className="text-2xl font-semibold text-gray-900">Melofy</span>
         </div>
         <div className="w-full max-w-md space-y-8">
           <div className="relative">
-            <h1 className="text-2xl font-medium text-gray-900 mb-3">{isLogin ? 'Welcome Back' : 'Join Melofy'}</h1>
-            <p className="text-gray-600 text-lg">{isLogin ? 'Sign in to your account' : 'Create an account to start your musical journey'}</p>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-3">{isLogin ? 'Welcome Back✌️' : 'Join Melofy✌️'}</h1>
+            <p className="text-gray-600 text-lg font-medium">{isLogin ? 'Sign in to your account' : 'Create an account to start your musical journey'}</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="group relative">
@@ -263,26 +218,17 @@ function Auth() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:flex flex-1 items-center justify-center p-8 z-10 relative bg-gradient-to-br from-green-50 to-gray-100">
-        <div className="text-center space-y-8 max-w-3xl w-full">
-          <div className="flex items-center justify-center gap-4 relative">
+      <div className="hidden lg:flex flex-1 items-center justify-center p-8 z-10 relative bg-[#fdfdfd]">
+        <div className="text-center -mt-10 max-w-2xl w-full">
+          <div className="flex items-center justify-center relative">
             <span
-              className="text-9xl text-green-600/60 animate-pulse-quote transition-transform duration-300"
-              onMouseEnter={handleQuoteHover}
-              onMouseLeave={handleQuoteLeave}
+              className="text-9xl text-green-600/60 mt-6 animate-pulse-quote transition-transform duration-300"
             >
               “
             </span>
             <h2 className="text-3xl text-gray-900 font-semibold animate-wave-text">
               Discover Your Rhythm with Melofy
             </h2>
-            <span
-              className="text-9xl text-green-600/60 animate-pulse-quote transition-transform duration-300"
-              onMouseEnter={handleQuoteHover}
-              onMouseLeave={handleQuoteLeave}
-            >
-              ”
-            </span>
           </div>
           <p className="text-lg text-gray-700 animate-fade-in leading-relaxed font-medium pb-10" style={{ animationDelay: '0.2s' }}>
             Immerse yourself in a world of music with Melofy. Create personalized playlists, explore new genres, and connect with a vibrant community of music lovers. Let the rhythm guide you to new experiences and unforgettable melodies.

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block;
+  }
+  aside {
+    transform: translateX(-100%);
+    position: fixed;
+    height: 100%;
+  }
+  aside.open {
+    transform: translateX(0);
+  }
+}
