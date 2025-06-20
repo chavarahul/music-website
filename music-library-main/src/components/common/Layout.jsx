@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Music, LogOut, Music2, Settings, Menu } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 function Layout({ children }) {
@@ -12,12 +12,11 @@ function Layout({ children }) {
 
   const handleLogout = () => {
     logout();
-    navigate('/auth');
+    window.location.href = '/auth';
   };
 
   const navItems = [
     { label: 'Songs', icon: Music2, path: '/' },
-    { label: 'Settings', icon: Settings, path: '/settings' },
   ];
 
   const handleNavigate = (path) => {
@@ -27,7 +26,6 @@ function Layout({ children }) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
-      {/* Sidebar */}
       <aside
         className={clsx(
           'bg-white border-r border-gray-300 flex flex-col justify-between transition-transform duration-300 z-50 w-64',
@@ -70,19 +68,18 @@ function Layout({ children }) {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-300 shadow-sm">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen((prev) => !prev)}
-              className="block md:hidden p-2 rounded-md hover:bg-gray-200 transition-colors"
+              className="block md:hidden p-2 rounded-md hover:bg-gray-200 transition-colors res"
             >
               <Menu className="w-5 h-5 text-gray-700" />
             </button>
             <h1 className="text-lg font-medium text-gray-800">Dashboard</h1>
           </div>
-          <div className="bg-green-700 text-white py-2 px-4 rounded-full text-sm font-semibold">
+          <div className="bg-green-700 text-white py-2 px-3.5 my-2 border rounded-full text-sm font-semibold">
             {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
           </div>
         </header>
@@ -92,7 +89,6 @@ function Layout({ children }) {
         </main>
       </div>
 
-      {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-40"

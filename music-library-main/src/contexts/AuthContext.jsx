@@ -6,7 +6,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('token') || null);
   const [currentUser, setCurrentUser] = useState(null);
 
-  const adminUsernames = ['admin1', 'admin2'];
+  const ADMIN_USERNAME = 'Admin';
+  const ADMIN_PASSWORD = 'Admin@123';
 
   useEffect(() => {
     if (token) {
@@ -31,18 +32,28 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = (username, password) => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      const payload = {
+        username,
+        role: 'admin',
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 60,
+      };
+      const newToken = btoa(JSON.stringify(payload));
+      setToken(newToken);
+      return true;
+    }
+
     const users = JSON.parse(localStorage.getItem('users') || '{}');
     const user = users[username];
 
     if (user && user.password === password) {
-      const role = adminUsernames.includes(username) ? 'admin' : 'user';
       const payload = {
         username,
-        role,
-        iat: Math.floor(Date.now() / 1000), 
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 60, 
+        role: 'user',
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 60,
       };
-
       const newToken = btoa(JSON.stringify(payload));
       setToken(newToken);
       return true;

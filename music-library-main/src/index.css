@@ -8,7 +8,7 @@
     box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
-/* Fade-in animation for header and description */
+
 @keyframes fade-in {
   0% {
     opacity: 0;
@@ -24,7 +24,6 @@
   animation: fade-in 1s ease-out forwards;
 }
 
-/* Subtle pulse animation for the button */
 @keyframes pulse-button {
   0% {
     transform: scale(1);
@@ -41,7 +40,6 @@
   animation: pulse-button 2s ease-in-out infinite;
 }
 
-/* Music-themed loader animation (equalizer bars) */
 .music-bar {
   display: inline-block;
   width: 6px;
@@ -72,5 +70,15 @@
   100% {
     transform: scaleY(1);
     background-color: #059669;
+  }
+}
+
+.res{
+  display: none !important;
+}
+
+@media (max-width:768px) {
+  .res{
+    display: block !important;
   }
 }

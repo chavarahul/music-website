@@ -6,9 +6,6 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar-toggle {
-    display: block;
-  }
   aside {
     transform: translateX(-100%);
     position: fixed;

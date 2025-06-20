@@ -122,7 +122,6 @@ const SongList = ({ currentUser }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-gray-900">Music Library</h1>
@@ -131,9 +130,7 @@ const SongList = ({ currentUser }) => {
           </div>
         </div>
         
-        {/* Controls */}
         <div className="flex flex-wrap gap-2">
-          {/* Search */}
           <div className="relative flex-1 min-w-64">
             <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             <input
@@ -239,7 +236,7 @@ const SongList = ({ currentUser }) => {
       {filteredSongs.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-gray-400 text-6xl mb-4">🎵</div>
-          <p className="text-gray-600 text-lg">No songs found matching your search.</p>
+          <p className="text-gray-600 text-lg">No songs found.</p>
           <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or filters.</p>
         </div>
       ) : groupBy && groupedSongs ? (
