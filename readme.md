@@ -1,122 +1,97 @@
 Music Streaming Web App
-A modern music streaming web application built with React, featuring a micro frontend architecture using Webpack Module Federation, role-based authentication (Admin/User), and deployed on Vercel. The app uses localStorage for persistent auth and song management.
-🌐 Live Applications
 
-Main Shell App: music-website-main.vercel.app
-Micro Frontend (Library): music-library-mfe.vercel.app
+A music streaming web app built with React, using a micro frontend setup with Webpack Module Federation, role-based authentication (Admin/User), and deployed on Vercel.
 
-📦 How to Run Locally
-✅ 1. Clone or Download
-git clone https://github.com/chavarahul/music-website.git
+Live Applications
+- Main Shell App: https://music-website-main.vercel.app
+- Micro Frontend (Library): https://music-library-mfe.vercel.app
 
-Or download the ZIP and extract it.
+How to Run Locally
 
-✅ 2. Setup Main App
-cd music-library-main
-npm install
-npm run dev
+1. Clone or Download
+   git clone https://github.com/chavarahul/music-website.git
+   Or download the ZIP and extract it.
 
-Open: http://localhost:3000
+2. Setup Main App
+   cd music-library-main
+   npm install
+   npm run dev
+   Open: http://localhost:3000
 
-The main app automatically fetches the remote micro frontend via Module Federation.
-🔐 Login Credentials (Demo)
+   The main app loads the micro frontend automatically.
 
+Login Credentials (Demo)
+| Role  | Username | Password    |
+|-------|----------|-------------|
+| Admin | Admin    | Admin@123   |
+| User  | Test     | Test@123    |
 
+You can sign up as a User with your own credentials. Admin login uses the above credentials.
 
-Role
-Username
-Password
+Micro Frontend Architecture
 
+The app uses Webpack Module Federation to split the music library into a separate micro frontend, allowing independent updates.
 
+Main Shell App (Host)
+Loads the MusicLibrary component from the micro frontend.
 
-Admin
-Admin
-Admin@123
-
-
-User
-Test
-Test@123
-
-
-You can also sign up with your own credentials as a User. Admin access is hardcoded.
-🧩 Micro Frontend Architecture
-This app uses Webpack Module Federation for independent micro frontend loading.
-🏠 Main Shell App (Host)
-Loads the remote MusicLibrary from the micro app.
 Configuration:
 remotes: {
-  music_library: "music_library@https://music-library-mfe.vercel.app/remoteEntry.js"
+  music_library: "music_library@https://music-library-mfe.vercel.app/assets/remoteEntry.js"
 }
 
-🎧 Micro Frontend App (Music Library)
+How It Works:
+- The main app (host) loads the micro frontend's MusicLibrary component.
+- On login, the Home page lazy-loads MusicLibrary with a loading spinner.
+- Code: Home.jsx checks for a valid token and redirects to /auth if not logged in.
+
+Micro Frontend App (Music Library)
 Exposes the MusicLibrary component.
+
 Configuration:
 exposes: {
-  './MusicLibrary': './src/components/MusicLibrary'
+  './MusicLibrary': './src/MusicLibrary.jsx'
 }
 
-On login, the user is redirected to the Home route, where the remote MusicLibrary component is lazy-loaded using React.Suspense.
-🔐 Role-Based Authentication (Admin/User)
-Implemented using AuthContext and localStorage.
+How It Works:
+- Hosted at https://music-library-mfe.vercel.app.
+- The MusicLibrary component (App.jsx) renders the SongList component, which handles song display and admin actions.
+- It receives the currentUser from the host to manage role-based features.
 
-JWT-like tokens: Base64-encoded JSON with iat, exp, username, and role.
-Auto logout: Triggers on token expiry.
-Context API: Manages login, logout, and signup.
+Role-Based Authentication (Admin/User)
 
-🔑 Access Rules
+Authentication uses React Context API and localStorage to manage Admin and User roles with tokens.
 
-Admin:
-Can add/delete songs.
-View only admin-added songs.
+How It Works:
+- Login:
+  - Admin: Uses hardcoded credentials (Admin/Admin@123).
+  - User: Checks credentials in localStorage or allows signup.
+  - Creates a base64-encoded token with username, role, issued time, and expiry (60 hours).
+- Signup: Adds new users to localStorage and logs them in.
+- Logout: Clears token and user data.
+- Token Check: Validates tokens on load; expired tokens trigger logout.
+- Code: AuthContext.js manages login, signup, logout, and stores tokens in localStorage.
 
+Access Rules
+- Admin: Can add/delete songs, sees only admin-added songs.
+- User: Can view all songs (default + admin-added), cannot add/delete.
 
-User:
-Can view both default and admin-added songs.
-Cannot add/delete songs.
+Features in Music Library (Micro App)
+- View songs with search, sort, and group options.
+- Search by title, artist, or album.
+- Sort by title, artist, album, or genre.
+- Group by genre or artist.
+- Add songs (Admin only) via a modal.
+- Delete songs (Admin only) with confirmation.
+- Responsive UI with Tailwind CSS.
+- Code: SongList.jsx manages song data, filters, and admin actions, storing admin-added songs in localStorage.
 
-
-
-🎵 Features in Music Library (Micro App)
-
-✅ View all songs (filtered, grouped, sorted).
-✅ Add songs (Admin only).
-✅ Delete songs (Admin only).
-✅ Search by title, artist, album.
-✅ Group by genre or artist.
-✅ Sort by title, artist, album, or genre.
-✅ Responsive and interactive UI with Tailwind CSS.
-
-🧠 Tech Stack
-
-
-
-Feature
-Stack/Library
-
-
-
-Frontend Framework
-React.js
-
-
-Micro Frontend
-Webpack Module Federation
-
-
-Routing & Suspense
-React Router DOM, lazy
-
-
-UI & Styling
-Tailwind CSS
-
-
-Authentication
-Context API + localStorage
-
-
-Deployment
-Vercel
-
-
+Tech Stack
+| Feature                | Stack/Library                     |
+|------------------------|-----------------------------------|
+| Frontend Framework     | React.js                          |
+| Micro Frontend         | Webpack Module Federation         |
+| Routing & Suspense     | React Router DOM, lazy            |
+| UI & Styling           | Tailwind CSS                      |
+| Authentication         | Context API + localStorage        |
+| Deployment             | Vercel                            |
