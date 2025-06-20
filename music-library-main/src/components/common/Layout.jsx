@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
-import { Music, LogOut, Music2, Settings, Menu } from 'lucide-react';
-import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Music, LogOut, Music2, Menu } from 'lucide-react';
+import { useNavigate, useLocation, } from 'react-router-dom';
 import clsx from 'clsx';
 
 function Layout({ children }) {
@@ -69,7 +69,7 @@ function Layout({ children }) {
       </aside>
 
       <div className="flex-1 flex flex-col">
-        <header className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-300 shadow-sm">
+        <header className="flex items-center justify-between px-4 py-[0.73rem] bg-white border-b border-gray-300 shadow-sm">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen((prev) => !prev)}
