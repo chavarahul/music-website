@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import federation from '@originjs/vite-plugin-federation';
-import tailwindcss from "tailwindcss"
 
 export default defineConfig({
   plugins: [react(),
@@ -14,11 +13,6 @@ export default defineConfig({
     shared: ['react', 'react-dom', 'react-router-dom'],
   }),
   ],
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
   server: {
     port: 3001,
     cors: true,

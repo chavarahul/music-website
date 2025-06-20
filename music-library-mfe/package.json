@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",

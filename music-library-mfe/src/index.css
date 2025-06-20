@@ -19,3 +19,9 @@
     transform: translateX(0);
   }
 }
+
+.btn-red{
+  background-color: red;
+  color: wheat;
+  border-radius:10px;
+}
