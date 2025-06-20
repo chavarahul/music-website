@@ -222,7 +222,7 @@ function Auth() {
         <div className="text-center -mt-10 max-w-2xl w-full">
           <div className="flex items-center justify-center relative">
             <span
-              className="text-9xl text-green-600/60 mt-6 animate-pulse-quote transition-transform duration-300"
+              className="text-9xl text-green-600/60 mt-6 ml-2 animate-pulse-quote transition-transform duration-300"
             >
               “
             </span>
@@ -230,7 +230,7 @@ function Auth() {
               Discover Your Rhythm with Melofy
             </h2>
           </div>
-          <p className="text-lg text-gray-700 animate-fade-in leading-relaxed font-medium pb-10" style={{ animationDelay: '0.2s' }}>
+          <p className="text-lg text-gray-700 animate-fade-in -mt-10 leading-relaxed font-medium pb-10" style={{ animationDelay: '0.2s' }}>
             Immerse yourself in a world of music with Melofy. Create personalized playlists, explore new genres, and connect with a vibrant community of music lovers. Let the rhythm guide you to new experiences and unforgettable melodies.
           </p>
           <div className="flex justify-center space-x-3">

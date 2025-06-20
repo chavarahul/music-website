@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body{
+  background-color: #f8f8f8;
+}
 
 .sidebar-toggle {
   display: none;
@@ -11,13 +24,14 @@
     position: fixed;
     height: 100%;
   }
+
   aside.open {
     transform: translateX(0);
   }
 }
 
-.btn-red{
+.btn-red {
   background-color: red;
   color: wheat;
-  border-radius:10px;
+  border-radius: 10px;
 }

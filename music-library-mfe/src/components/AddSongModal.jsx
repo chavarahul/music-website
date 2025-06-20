@@ -142,7 +142,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-gray-50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden border border-gray-200">
+      <div className="bg-[#f8f8f8] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden border border-gray-200">
         <div className=" px-6 pt-3 ">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
