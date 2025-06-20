@@ -8,7 +8,7 @@ const SongGrid = ({ filteredSongs, groupedSongs, groupBy, role, deleteConfirm, s
         <div className="text-center py-12">
           <div className="text-gray-400 text-6xl mb-4">🎵</div>
           <p className="text-gray-600 text-lg">No songs found.</p>
-          <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or filters.</p>
+          {/* <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or filters.</p> */}
         </div>
       ) : groupBy && groupedSongs ? (
         <div className="space-y-8">

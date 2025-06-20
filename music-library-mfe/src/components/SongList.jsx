@@ -3,7 +3,6 @@ import Header from './Header.jsx';
 import SongGrid from './SongGrid.jsx';
 import AddSongModal from './AddSongModal.jsx';
 import DeleteConfirmationModal from './DeleteSongModal.jsx';
-import { staticSongs } from '../constants/data.js';
 
 const SongList = ({ currentUser }) => {
   const [addedSongs, setAddedSongs] = useState(() => {
@@ -24,11 +23,8 @@ const SongList = ({ currentUser }) => {
   const role = currentUser?.role;
 
   const displaySongs = useMemo(() => {
-    if (role === 'admin') {
-      return addedSongs;
-    }
-    return [...staticSongs, ...addedSongs];
-  }, [role, addedSongs]);
+    return addedSongs;
+  }, [addedSongs]);
 
   const filteredSongs = useMemo(() => {
     const uniqueSongs = Array.from(new Set(displaySongs.map(song => song.id)))
@@ -40,7 +36,7 @@ const SongList = ({ currentUser }) => {
         (song.album && song.album.toLowerCase().includes(filter.toLowerCase()))
       )
       .sort((a, b) => {
-        const valA = (a[sortBy] || 'zzz').toLowerCase(); 
+        const valA = (a[sortBy] || 'zzz').toLowerCase();
         const valB = (b[sortBy] || 'zzz').toLowerCase();
         return valA.localeCompare(valB);
       });
