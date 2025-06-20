@@ -1,10 +1,8 @@
-import React from 'react';
 import SongList from './components/SongList.jsx';
 
-const App = ({currentUser}) => {
-
+const App = ({ currentUser }) => {
   return (
-          <SongList currentUser={currentUser} />
+    <SongList currentUser={currentUser} />
   );
 };
 

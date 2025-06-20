@@ -20,7 +20,7 @@ const SongGrid = ({ filteredSongs, groupedSongs, groupBy, role, deleteConfirm, s
                   {groupedSongs[groupKey].length} songs
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {groupedSongs[groupKey].map((song) => (
                   <SongCard key={song.id} song={song} role={role} deleteConfirm={deleteConfirm} setDeleteConfirm={setDeleteConfirm} />
                 ))}
@@ -29,7 +29,7 @@ const SongGrid = ({ filteredSongs, groupedSongs, groupBy, role, deleteConfirm, s
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4">
           {filteredSongs.map((song) => (
             <SongCard key={song.id} song={song} role={role} deleteConfirm={deleteConfirm} setDeleteConfirm={setDeleteConfirm} />
           ))}
