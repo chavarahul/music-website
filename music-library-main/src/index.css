@@ -82,3 +82,7 @@
     display: block !important;
   }
 }
+
+:where(body,html)::-webkit-scrollbar{
+  width: 0px;
+}
