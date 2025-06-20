@@ -2,11 +2,11 @@ import React from 'react'
 import FilterControls from './components/FilterControls'
 import SongList from './components/SongList'
 
-const MusicLibrary = ({token}) => {
+const MusicLibrary = ({currentUser}) => {
   return (
     <div>
       <FilterControls/>
-      <SongList token={token}/>
+      <SongList currentUser={currentUser}/>
     </div>
   )
 }

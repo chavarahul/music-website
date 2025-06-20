@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 function Navbar() {
-  const { token, login, logout } = useContext(AuthContext);
+  const { token, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
     <nav className="bg-blue-600 p-4 text-white shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-bold">Music Library</h1>
+        <h1 className="text-xl font-bold">
+          <Link to="/">Music Library</Link>
+        </h1>
         <div className="space-x-4">
           {token ? (
             <button
@@ -22,20 +24,12 @@ function Navbar() {
               Logout
             </button>
           ) : (
-            <>
-              <button
-                onClick={() => login('admin')}
-                className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 transition"
-              >
-                Login as Admin
-              </button>
-              <button
-                onClick={() => login('user')}
-                className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 transition"
-              >
-                Login as User
-              </button>
-            </>
+            <Link
+              to="/auth"
+              className="bg-green-500 px-4 py-2 rounded hover:bg-green-600 transition"
+            >
+              Login / Signup
+            </Link>
           )}
         </div>
       </div>
