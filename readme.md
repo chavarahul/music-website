@@ -13,10 +13,10 @@ How to Run Locally
    Or download the ZIP and extract it.
 
 2. Setup Main App
-   cd music-library-main
-   npm install
-   npm run dev
-   Open: http://localhost:3000
+   - cd music-library-main
+   - npm install
+   - npm run dev
+   - Open: http://localhost:3000
 
    The main app loads the micro frontend automatically.
 

@@ -59,7 +59,7 @@ function Auth() {
       return;
     }
     setIsLoading(true);
-    const success = isLogin ? login(username, password) : signup(username, password);
+    const success = isLogin ? login(username.trim(), password.trim()) : signup(username.trim(), password.trim());
     if (success) {
       navigate('/');
     } else {
