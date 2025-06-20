@@ -1,17 +1,18 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Search, ChevronDown, Grid, Plus, X, Trash2, SortAsc } from 'lucide-react';
+import Header from './Header.jsx';
+import SongGrid from './SongGrid.jsx';
+import AddSongModal from './AddSongModal.jsx';
+import DeleteConfirmationModal from './DeleteSongModal.jsx';
 
 const SongList = ({ currentUser }) => {
-  // Static songs (only for users)
   const staticSongs = [
-    { id: 1, title: 'Anusha', artist: '', album: '', duration: '', genre: 'Pop' },
+    { id: 1, title: 'Perfect', artist: 'Ed Sheeran', album: '', duration: '3:00', genre: 'Pop' },
     { id: 2, title: 'Singout', artist: '', album: '', duration: '', genre: 'Indie Pop' },
     { id: 3, title: 'Watermelon Sugar', artist: 'Harry Styles', album: 'Fine Line', duration: '2:54', genre: 'Pop' },
     { id: 4, title: 'Peaches', artist: 'Justin Bieber ft. Daniel Caesar', album: 'Justice', duration: '3:18', genre: 'R&B' },
     { id: 5, title: 'Good 4 U', artist: 'Olivia Rodrigo', album: 'Sour', duration: '', genre: 'Rock' },
   ];
 
-  // Load admin-added songs from localStorage or initialize empty
   const [addedSongs, setAddedSongs] = useState(() => {
     const savedSongs = localStorage.getItem('adminAddedSongs');
     return savedSongs ? JSON.parse(savedSongs) : [];
@@ -25,10 +26,10 @@ const SongList = ({ currentUser }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showGroupDropdown, setShowGroupDropdown] = useState(false);
+  const [error, setError] = useState('');
 
   const role = currentUser?.role;
 
-  // Determine songs to display based on role
   const displaySongs = useMemo(() => {
     if (role === 'admin') {
       return addedSongs;
@@ -56,17 +57,20 @@ const SongList = ({ currentUser }) => {
     }, {});
   }, [filteredSongs, groupBy]);
 
-  // Persist added songs to localStorage
   useEffect(() => {
     localStorage.setItem('adminAddedSongs', JSON.stringify(addedSongs));
   }, [addedSongs]);
 
   const handleAddSong = () => {
-    if (!newSong.title.trim()) return;
+    if (!newSong.title.trim() || !newSong.artist.trim() || !newSong.album.trim() || !newSong.duration.trim() || !newSong.genre.trim()) {
+      setError('All fields are required.');
+      return;
+    }
     const id = addedSongs.length ? Math.max(...addedSongs.map((s) => s.id)) + 1 : 1;
     setAddedSongs([...addedSongs, { id, ...newSong }]);
     setNewSong({ title: '', artist: '', album: '', duration: '', genre: '' });
     setShowAddModal(false);
+    setError('');
   };
 
   const handleDeleteSong = (id) => {
@@ -87,141 +91,26 @@ const SongList = ({ currentUser }) => {
     { value: 'artist', label: 'By Artist' }
   ];
 
-  const SongCard = ({ song }) => (
-    <div className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-100 transition-all duration-200 border border-gray-200">
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="font-semibold text-gray-900 truncate flex-1 mr-2">{song.title}</h3>
-        {role === 'admin' && (
-          <button
-            onClick={() => setDeleteConfirm(song.id)}
-            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors flex-shrink-0"
-            title="Delete song"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-      <div className="space-y-1 text-sm text-gray-600">
-        <div className="flex items-center">
-          <span className="w-12 text-gray-500">Artist:</span>
-          <span className="truncate">{song.artist || 'Unknown Artist'}</span>
-        </div>
-        <div className="flex items-center">
-          <span className="w-12 text-gray-500">Album:</span>
-          <span className="truncate">{song.album || 'Unknown Album'}</span>
-        </div>
-        <div className="flex justify-between text-xs">
-          <span className="text-gray-500">Duration: {song.duration || '-'}</span>
-          <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-            {song.genre || 'Unknown'}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-gray-900">Music Library</h1>
-          <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-            {filteredSongs.length} songs
-          </div>
-        </div>
-        
-        <div className="flex flex-wrap gap-2">
-          <div className="relative flex-1 min-w-64">
-            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search songs, artists, albums..."
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
-          </div>
-          
-          {/* Sort Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setShowSortDropdown(!showSortDropdown);
-                setShowGroupDropdown(false);
-              }}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors bg-white"
-            >
-              <SortAsc className="w-4 h-4" />
-              <span className="text-sm">Sort: {sortOptions.find(opt => opt.value === sortBy)?.label}</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {showSortDropdown && (
-              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-40">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      setSortBy(option.value);
-                      setShowSortDropdown(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${
-                      sortBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          
-          {/* Group Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setShowGroupDropdown(!showGroupDropdown);
-                setShowSortDropdown(false);
-              }}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors bg-white"
-            >
-              <Grid className="w-4 h-4" />
-              <span className="text-sm">Group: {groupOptions.find(opt => opt.value === groupBy)?.label}</span>
-              <ChevronDown className="w-4 h-4" />
-            </button>
-            {showGroupDropdown && (
-              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-40">
-                {groupOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      setGroupBy(option.value);
-                      setShowGroupDropdown(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg ${
-                      groupBy === option.value ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-700'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          
-          {/* Add Song Button */}
-          {role === 'admin' && (
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="text-sm">Add Song</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Click outside to close dropdowns */}
+      <Header
+        filteredSongsLength={filteredSongs.length}
+        filter={filter}
+        setFilter={setFilter}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        groupBy={groupBy}
+        setGroupBy={setGroupBy}
+        sortOptions={sortOptions}
+        groupOptions={groupOptions}
+        showSortDropdown={showSortDropdown}
+        setShowSortDropdown={setShowSortDropdown}
+        showGroupDropdown={showGroupDropdown}
+        setShowGroupDropdown={setShowGroupDropdown}
+        role={role}
+        showAddModal={showAddModal}
+        setShowAddModal={setShowAddModal}
+      />
       {(showSortDropdown || showGroupDropdown) && (
         <div 
           className="fixed inset-0 z-5" 
@@ -231,145 +120,29 @@ const SongList = ({ currentUser }) => {
           }}
         />
       )}
-
-      {/* Songs Display */}
-      {filteredSongs.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-400 text-6xl mb-4">🎵</div>
-          <p className="text-gray-600 text-lg">No songs found.</p>
-          <p className="text-gray-500 text-sm mt-2">Try adjusting your search terms or filters.</p>
-        </div>
-      ) : groupBy && groupedSongs ? (
-        <div className="space-y-8">
-          {Object.keys(groupedSongs).sort().map((groupKey) => (
-            <div key={groupKey}>
-              <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">{groupKey}</h2>
-                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-sm">
-                  {groupedSongs[groupKey].length} songs
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {groupedSongs[groupKey].map((song) => (
-                  <SongCard key={song.id} song={song} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredSongs.map((song) => (
-            <SongCard key={song.id} song={song} />
-          ))}
-        </div>
-      )}
-
-      {/* Add Song Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Add New Song</h2>
-              <button 
-                onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
-                <input
-                  type="text"
-                  value={newSong.title}
-                  onChange={(e) => setNewSong({ ...newSong, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Artist</label>
-                <input
-                  type="text"
-                  value={newSong.artist}
-                  onChange={(e) => setNewSong({ ...newSong, artist: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Album</label>
-                <input
-                  type="text"
-                  value={newSong.album}
-                  onChange={(e) => setNewSong({ ...newSong, album: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
-                <input
-                  type="text"
-                  value={newSong.duration}
-                  onChange={(e) => setNewSong({ ...newSong, duration: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="e.g., 3:18"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Genre</label>
-                <input
-                  type="text"
-                  value={newSong.genre}
-                  onChange={(e) => setNewSong({ ...newSong, genre: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div className="flex justify-end gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={handleAddSong}
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Add Song
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {deleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-sm">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h2>
-            <p className="text-gray-600 mb-6">Are you sure you want to permanently delete this song? This action cannot be undone.</p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={() => setDeleteConfirm(null)}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDeleteSong(deleteConfirm)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <SongGrid
+        filteredSongs={filteredSongs}
+        groupedSongs={groupedSongs}
+        groupBy={groupBy}
+        role={role}
+        deleteConfirm={deleteConfirm}
+        setDeleteConfirm={setDeleteConfirm}
+        handleDeleteSong={handleDeleteSong}
+      />
+      <AddSongModal
+        showAddModal={showAddModal}
+        setShowAddModal={setShowAddModal}
+        newSong={newSong}
+        setNewSong={setNewSong}
+        handleAddSong={handleAddSong}
+        error={error}
+        setError={setError}
+      />
+      <DeleteConfirmationModal
+        deleteConfirm={deleteConfirm}
+        setDeleteConfirm={setDeleteConfirm}
+        handleDeleteSong={handleDeleteSong}
+      />
     </div>
   );
 };

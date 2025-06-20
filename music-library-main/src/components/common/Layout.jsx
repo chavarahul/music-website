@@ -79,7 +79,7 @@ function Layout({ children }) {
             </button>
             <h1 className="text-lg font-medium text-gray-800">Dashboard</h1>
           </div>
-          <div className="bg-green-700 text-white py-2 px-3.5 my-2 border rounded-full text-sm font-semibold">
+          <div className="bg-green-700 text-white py-2 px-3.5  border rounded-full text-sm font-semibold">
             {currentUser?.username?.charAt(0).toUpperCase() || 'U'}
           </div>
         </header>
