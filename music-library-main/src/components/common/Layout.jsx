@@ -16,7 +16,7 @@ function Layout({ children }) {
   };
 
   const navItems = [
-    { label: 'Songs', icon: Music2, path: '/' },
+    { label: 'Music Library', icon: Music2, path: '/' },
   ];
 
   const handleNavigate = (path) => {

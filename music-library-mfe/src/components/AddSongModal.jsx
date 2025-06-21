@@ -176,7 +176,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
                 name="title"
                 value={newSong.title}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border-2 rounded-xl bg-white/80 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
+                className={`w-full px-4 py-3 border-2 rounded-xl bg-transparent transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
                   validationErrors.title 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-200 focus:border-green-500'
@@ -201,7 +201,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
                 name="artist"
                 value={newSong.artist}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border-2 rounded-xl bg-white/80 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
+                className={`w-full px-4 py-3 border-2 rounded-xl bg-transparent transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
                   validationErrors.artist 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-200 focus:border-green-500'
@@ -226,7 +226,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
                 name="album"
                 value={newSong.album}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border-2 rounded-xl bg-white/80 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
+                className={`w-full px-4 py-3 border-2 rounded-xl bg-transparent transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
                   validationErrors.album 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-200 focus:border-green-500'
@@ -251,7 +251,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
                 name="duration"
                 value={newSong.duration}
                 onChange={handleDurationChange}
-                className={`w-full px-4 py-3 border-2 rounded-xl bg-white/80 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
+                className={`w-full px-4 py-3 border-2 rounded-xl bg-transparent transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
                   validationErrors.duration 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-200 focus:border-green-500'
@@ -277,7 +277,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
                 name="genre"
                 value={newSong.genre}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border-2 rounded-xl bg-white/80 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
+                className={`w-full px-4 py-3 border-2 rounded-xl bg-transparent transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-100 ${
                   validationErrors.genre 
                     ? 'border-red-300 focus:border-red-500' 
                     : 'border-gray-200 focus:border-green-500'
@@ -299,7 +299,7 @@ const AddSongModal = ({ showAddModal, setShowAddModal, newSong, setNewSong, hand
             <button
               type="button"
               onClick={handleClose}
-              className="px-6 py-2.5 text-gray-700 bg-white/80 border border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
+              className="px-6 py-2.5 text-gray-700 bg-transparent border border-gray-300 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium"
             >
               Cancel
             </button>
