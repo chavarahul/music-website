@@ -98,7 +98,7 @@ function Auth() {
               <label className="block text-sm font-semibold text-gray-700 mb-2">Username</label>
               <input
                 type="text"
-                placeholder="rahul"
+                placeholder="Test"
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
